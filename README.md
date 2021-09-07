@@ -64,4 +64,4 @@ another way to execute your hiding or shell script is connector, if you enable y
 
 ### Examples
 
-![alt text](images/example1.jpeg)
+![example](images/example.jpeg)
