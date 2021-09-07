@@ -24,11 +24,11 @@ This project is for malware analytists and for creator of CTF or cyber security 
 
 ### Features
 
-RevShell based connector
-Hiding dents (files, files prefixes, process id)
-Hiding ports in TCP Connection
-Spawning scripts to user-space
-Hiding module from module list
+* RevShell based connector
+* Hiding dents (files, files prefixes, process id)
+* Hiding ports in TCP Connection
+* Spawning scripts to user-space
+* Hiding module from module list
 
 ## Usage
 
