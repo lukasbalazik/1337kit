@@ -40,7 +40,7 @@ hideme: true
 connector: 
     ip: "127.0.0.1"
     port: "8080"
-hide_dent:
+hide_dent: # Here you can put all your files, directories and process id you want to hide from user
     - "91746"
     - "1337test_"
 hide_port:
