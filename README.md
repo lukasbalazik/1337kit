@@ -53,7 +53,7 @@ shells:
 After you create your yaml just run the builder.py
 
 ```sh
-$ python3 builder.py --config config.yml
+$ python3 builder.py --config testfiles/config.yml
 ```
 And rootkit.ko will be created.
 
