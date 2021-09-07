@@ -12,6 +12,18 @@ parser = argparse.ArgumentParser(description='Generate rootkit from yaml prescri
 parser.add_argument('--config', type=str, default="config.yml", help='Yaml prescription file')
 args = parser.parse_args()
 
+print("""
+ ████   ████████   ████████  ██████████ █████       ███   █████   
+░░███  ███░░░░███ ███░░░░███░███░░░░███░░███       ░░░   ░░███    
+ ░███ ░░░    ░███░░░    ░███░░░    ███  ░███ █████ ████  ███████  
+ ░███    ██████░    ██████░       ███   ░███░░███ ░░███ ░░░███░   
+ ░███   ░░░░░░███  ░░░░░░███     ███    ░██████░   ░███   ░███    
+ ░███  ███   ░███ ███   ░███    ███     ░███░░███  ░███   ░███ ███
+ █████░░████████ ░░████████    ███      ████ █████ █████  ░░█████ 
+░░░░░  ░░░░░░░░   ░░░░░░░░    ░░░      ░░░░ ░░░░░ ░░░░░    ░░░░░  
+LKM Rootkit Builder
+""")
+
 with open(args.config, 'r') as file:
     rootkit = yaml.safe_load(file)
 
