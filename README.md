@@ -61,3 +61,7 @@ another way to execute your hiding or shell script is connector, if you enable y
 * TCP IPv6 hiding
 * hiding connections based on IP
 * builder name obfuscation (cuz now when you do strings you will see symbols like init_rootkit ect)
+
+### Examples
+
+![alt text](images/example1.jpeg)
