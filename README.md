@@ -27,6 +27,7 @@ This project is for malware analytists and for creator of CTF or cyber security 
 * RevShell based connector
 * Hiding dents (files, files prefixes, process id)
 * Hiding connections based on Ports in TCP Connection
+* Hiding connections based on IPv4 in TCP Connection
 * Spawning scripts to user-space
 * Hiding module from module list
 
@@ -46,6 +47,9 @@ hide_dent: # Here you can put all your files, directories and process id you wan
 hide_port:
     - "8080"
     - "1337"
+hide_ip:
+    - "127.0.0.1"
+    - "8.8.8.8"    
 shells:
     - "sleep 1000"
 ```
@@ -65,13 +69,15 @@ another way to execute your hiding or shell script is connector, if you enable y
 * SHOW_HIDDEN_DENT
 * HIDE_PORT
 * SHOW_HIDDEN_PORT
+* HIDE_IP
+* SHOW_HIDDEN_IP
 * BINDSHELL_CREATE
 * RUN_CUSTOM_BASH
 
 ## Future Features
 
 * TCP IPv6 hiding
-* hiding connections based on IP
+* UDP hiding
 * builder name obfuscation (cuz now when you do strings you will see symbols like init_rootkit ect)
 
 ### Examples

