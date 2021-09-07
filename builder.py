@@ -4,7 +4,7 @@ import os
 import yaml
 import argparse
 
-from python_src.template_generator import TemplateGenerator
+from builder_src.template_generator import TemplateGenerator
 
 generator = TemplateGenerator()
 
