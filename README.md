@@ -15,6 +15,7 @@ LKM Rootkit Builder
 ## About project
 
 1337kit is 64-bit LKM Rootkit builder based on yaml prescription
+Fully tested on: Linux 5.11.0-34-generic 20.04.1-Ubuntu SMP x86_64 x86_64 x86_64 GNU/Linux
 
 ### DISCLAIMER: FOR EDUCATIONAL AND INFORMATIONAL PURPOSES ONLY
 
