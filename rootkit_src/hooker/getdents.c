@@ -28,7 +28,7 @@ void remove_hidden_dent(char *dent)
 		if (memcmp(*(hidden_dents + i), dent, strlen(*(hidden_dents + i))) == 0) {
 			move = 1;
 		}
-		if (move && i + 1 < mnozstvo_zaznamov) {                                
+		if (move && i + 1 < dent_size) {                                
 			int size = strlen(*(hidden_dents + i + 1));                                   
 			*(hidden_dents + i) = realloc(*(hidden_dents + i), (size + 1)*sizeof(char));          
 			memset(*(hidden_dents + i), 0, (size + 1));                                   
