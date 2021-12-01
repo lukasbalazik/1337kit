@@ -23,6 +23,18 @@ This project is for malware analysts and for creator of CTF or cyber security ex
 * Spawning scripts to user-space
 * Hiding module from module list
 
+## Installation
+
+Builder requirements:
+
+```sh
+$ pip3 install -r requirements.txt
+```
+Install requirements for building LKM:
+
+```sh
+sudo apt-get install build-essential linux-headers-$(uname -r)
+```
 ## Usage
 
 You have to create your yaml prescription for custom rootkit,
