@@ -84,6 +84,7 @@ another way to execute your hiding or shell script is connector, if you enable y
 
 * TCP IPv6 hiding
 * UDP based hiding
+* Rootkit string encryption/obfuscation
 
 ### Examples
 
