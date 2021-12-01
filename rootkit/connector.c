@@ -34,7 +34,7 @@ int key_value(struct entry *c, char *key)
     return -1;
 }
 
-void add_function(char *c, void *func) 
+void add_function(char *c, void *func)
 {
 	struct entry command = {c, size};
 	size++;
@@ -99,8 +99,8 @@ int connector(char *ip, int port)
 	char *first_part;
 	int size;
 	int i;
-	
-	long command_number;
+
+  long command_number;
 
 	ret = sock_create(PF_INET, SOCK_STREAM, IPPROTO_TCP, &conn_socket);
 	if (ret < 0) {
@@ -145,7 +145,7 @@ int connector(char *ip, int port)
 			}
 		}
 		kfree(first_part);
-		
+
 		for (i = 0; i < size; i++) {
 			if (*(response+i) == '\n' || *(response+i) == ' ') {
 				response += i + 1;

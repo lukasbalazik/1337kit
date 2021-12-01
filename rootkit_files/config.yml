@@ -1,7 +1,7 @@
-hideme: false
-connector: 
+hideme: true
+connector:
     ip: "127.0.0.1"
-    port: "8080"
+    port: "1337"
 hide_dent:
     - "91746"
     - "1337test_"
