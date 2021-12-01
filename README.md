@@ -83,8 +83,7 @@ another way to execute your hiding or shell script is connector, if you enable y
 ## Future Features
 
 * TCP IPv6 hiding
-* UDP hiding
-* builder name obfuscation (cuz now when you do strings you will see symbols like init_rootkit ect)
+* UDP based hiding
 
 ### Examples
 
