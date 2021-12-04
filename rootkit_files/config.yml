@@ -5,9 +5,13 @@ connector:
 hide_dent:
     - "91746"
     - "1337test_"
-hide_port:
+hide_tcp_port:
     - "8080"
-hide_ip:
+hide_tcp_ip:
     - "127.0.0.1"
-shells:
+hide_udp_port:
+    - "8080"
+hide_udp_ip:
+    - "127.0.0.1"
+shell:
     - "sleep 1000"

