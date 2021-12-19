@@ -17,9 +17,11 @@ This project is for malware analysts and for creator of CTF or cyber security ex
 ### Rootkit Features
 
 * RevShell based connector
-* Hiding dents (files, files prefixes, process id)
-* Hiding connections based on Ports in TCP Connection
-* Hiding connections based on IPv4 in TCP Connection
+* Hiding dents (files, files prefixes, process ids)
+* Hiding connections based on Ports in TCP Connection (IPv4 and IPv6)
+* Hiding connections based on IP in TCP Connection (IPv4)
+* Hiding connections based on Ports in UDP Connection (IPv4 and IPv6)
+* Hiding connections based on IP in UDP Connection (IPv4)
 * Spawning scripts to user-space
 * Hiding module from module list
 

