@@ -123,7 +123,6 @@ int connector(char *ip, int port)
         memset(response, 0, MAX_SIZE);
         receive_message(conn_socket, response, MSG_WAITFORONE);
 
-        printk(KERN_INFO "Received Message: %s", response);
         size = strlen(response);
         if (size < 1)
             break;

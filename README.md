@@ -14,7 +14,7 @@ This project is for malware analysts and for creator of CTF or cyber security ex
 
 **I do not take any responsibility for usage of this project**
 
-### Features
+### Rootkit Features
 
 * RevShell based connector
 * Hiding dents (files, files prefixes, process id)
@@ -22,6 +22,12 @@ This project is for malware analysts and for creator of CTF or cyber security ex
 * Hiding connections based on IPv4 in TCP Connection
 * Spawning scripts to user-space
 * Hiding module from module list
+
+### Builder Features
+
+* Files and functions obfuscation
+* Strings encryption
+* Verbose building
 
 ## Installation
 
@@ -68,7 +74,7 @@ After you create your yaml just run the builder.py
 
 ```sh
 $ python3 builder.py --help
-usage: builder.py [-h] [-c CONFIG] [-o [OBFUSCATE]]
+usage: builder.py [-h] -c CONFIG [-v] [-o] [-s]
 
 Generate rootkit from yaml prescription
 
@@ -76,9 +82,11 @@ optional arguments:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
                         Yaml prescription file
-  -o [OBFUSCATE], --obfuscate [OBFUSCATE]
+  -v, --verbose         Debug Mode
+  -o, --obfuscate_files
                         Enable rootkit symbols obfuscation
-
+  -s, --obfuscate_strings
+                        Enable rootkit strings obfuscation
 ```
 
 ![builder](images/builder.png)
@@ -109,14 +117,14 @@ tcp_seq_show.c file in hooker is pretty much same as udp_seq_show, but i split i
 ## Future Features
 
 * TCP and UDP IPv6 hiding
-* Rootkit string encryption/obfuscation
+* AES Encryption support
 
 ### Examples
 
 ```sh
 $ python3 builder.py --config testfiles/config.yml
-$ sudo insmod rootkit.ko
-$ nc -lvnp 8080
+$ sudo insmod project.ko
+$ nc -lvnp 1337
  Listening on 0.0.0.0 8080
  Connection received on 127.0.0.1 39040
  RUN_CUSTOM_BASH sleep 1000

