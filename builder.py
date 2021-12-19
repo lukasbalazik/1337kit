@@ -68,6 +68,19 @@ if args.verbose:
     log.info("v: Settings")
     log.info(pformat(rootkit))
 
+if "module" not in rootkit.keys():
+    rootkit["module"] = {}
+    rootkit["module"]["author"] = "default"
+    rootkit["module"]["description"] = "default"
+    rootkit["module"]["version"] = "1.0"
+else:
+    if "author" not in rootkit["module"].keys():
+        rootkit["module"]["author"] = "default"
+    if "description" not in rootkit["module"].keys():
+        rootkit["module"]["description"] = "default"
+    if "version" not in rootkit["module"].keys():
+        rootkit["module"]["version"] = "1.0"
+
 tm = Template(template)
 log.info("v: Rendering rootkit template")
 msg = tm.render(rootkit)
@@ -96,6 +109,8 @@ if args.obfuscate_files:
     log.info("v: Files and Functions obfuscation ended")
     obfuscated = True
 
+error = False
+
 log.info("v: Building rootkit")
 s = os.system("make")
 if os.WIFEXITED(s):
@@ -110,10 +125,13 @@ rootkit_name = "project"
 if obfuscated:
     rootkit_name = obFilesAndFunctions.get_name()
 
-os.system("mv /tmp/"+build_directory+"/"+rootkit_name+".ko "+original_directory)
+if not error:
+    os.system("mv /tmp/"+build_directory+"/"+rootkit_name+".ko "+original_directory)
+
 if args.verbose:
     log.info("v: Build with source code in "+build_directory)
 else:
     shutil.rmtree("/tmp/"+build_directory)
 
-print("\n=== File "+original_directory+"/"+rootkit_name+".ko created ===\n")
+if not error:
+    print("\n=== File "+original_directory+"/"+rootkit_name+".ko created ===\n")

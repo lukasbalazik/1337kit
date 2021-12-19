@@ -9,9 +9,9 @@
 #include <linux/wait.h>
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("default");
-MODULE_DESCRIPTION("module");
-MODULE_VERSION("0.01");
+MODULE_AUTHOR("{{ module.author }}");
+MODULE_DESCRIPTION("{{ module.description }}");
+MODULE_VERSION("{{ module.version }}");
 
 #include "core.h"
 

